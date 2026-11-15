@@ -1,20 +1,3 @@
-// IMPORTAR FIREBASE
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// CONFIGURACIÓN FIREBASE
-const firebaseConfig = {
-  apiKey: "AIzaSyCU5hqrwn8sJacmOr3YL_I8zPOdoXiLE4g",
-  authDomain: "coperativa-cbtis-19-29c77.firebaseapp.com",
-  projectId: "coperativa-cbtis-19-29c77",
-  storageBucket: "coperativa-cbtis-19-29c77.firebasestorage.app",
-  messagingSenderId: "1089480551361",
-  appId: "1:1089480551361:web:6770e32f300c05e0861d40"
-};
-
-// INICIAR FIREBASE
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 //carrito
 let carrito = {
