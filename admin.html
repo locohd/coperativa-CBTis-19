@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Cooperativa CBTis 19</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    margin: 0;
+    padding: 20px;
+    color: #222;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.contenedor-pedidos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.seccion {
+    background: #e8ebef;
+    padding: 18px;
+    border-radius: 16px;
+    min-width: 0;
+}
+
+.seccion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.seccion-header h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.btn-borrar-todos {
+    background: #b91c1c;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-borrar-todos:hover {
+    background: #991b1b;
+    transform: translateY(-1px);
+}
+
+.pedido {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 10px #00000012;
+    overflow-wrap: anywhere;
+}
+
+.pendiente {
+    color: #d93025;
+    font-weight: bold;
+}
+
+.listo {
+    color: #188038;
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 12px;
+    margin: 6px 5px 0 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-listo {
+    background: #188038;
+    color: white;
+}
+
+.btn-borrar {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.vacio {
+    color: #666;
+    text-align: center;
+    padding: 20px 5px;
+}
+
+/* ==========================================================================
+   VENTANA MODAL CON DISEÑO PARA CONFIRMAR BORRADO
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-card {
+    background: white;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    animation: aparecerModal 0.2s ease-out;
+}
+
+@keyframes aparecerModal {
+    from {
+        transform: scale(0.92);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-icon-danger {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 26px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    border: 2px solid #fca5a5;
+}
+
+.modal-card h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.modal-card p {
+    margin: 0 0 22px;
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.modal-acciones {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-modal-cancelar {
+    flex: 1;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 0;
+}
+
+.btn-modal-cancelar:hover {
+    background: #e5e7eb;
+}
+
+.btn-modal-eliminar {
+    flex: 1;
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 0;
+}
+
+.btn-modal-eliminar:hover {
+    background: #b91c1c;
+}
+
+@media (max-width: 700px) {
+    .contenedor-pedidos {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Panel Admin - Cooperativa CBTis 19</h1>
+
+<div class="contenedor-pedidos">
+
+    <!-- SECCIÓN: PEDIDOS PENDIENTES -->
+    <section class="seccion">
+        <div class="seccion-header">
+            <h2>Pedidos pendientes <span id="num-pendientes">0</span></h2>
+        </div>
+        <div id="pedidos-pendientes">
+            <p class="vacio">Cargando pedidos...</p>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: PEDIDOS LISTOS (YA HECHOS) -->
+    <section class="seccion">
+        <div class="seccion-header">
+            <h2>Pedidos listos <span id="num-listos">0</span></h2>
+            <button id="btn-borrar-todos-listos" class="btn-borrar-todos" onclick="solicitarBorrarTodosListos()" style="display: none;">
+                Borrar todos los listos
+            </button>
+        </div>
+        <div id="pedidos-listos">
+            <p class="vacio">Cargando pedidos...</p>
+        </div>
+    </section>
+
+</div>
+
+<!-- VENTANA MODAL CON DISEÑO PARA CONFIRMAR BORRADO -->
+<div class="modal-backdrop" id="modal-confirmar" style="display: none;">
+    <div class="modal-card">
+        <div class="modal-icon-danger">!</div>
+        <h3 id="modal-titulo">Confirmar eliminación</h3>
+        <p id="modal-mensaje">¿Estás seguro de que deseas eliminar este pedido?</p>
+        
+        <div class="modal-acciones">
+            <button type="button" class="btn-modal-cancelar" onclick="cerrarModalConfirmar()">
+                Cancelar
+            </button>
+            <button type="button" class="btn-modal-eliminar" id="btn-modal-confirmar-accion">
+                Eliminar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    onSnapshot,
+    doc,
+    updateDoc,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCU5hqrwn8sJacmOr3YL_I8zPOdoXiLE4g",
+    authDomain: "coperativa-cbtis-19-29c77.firebaseapp.com",
+    projectId: "coperativa-cbtis-19-29c77",
+    storageBucket: "coperativa-cbtis-19-29c77.firebasestorage.app",
+    messagingSenderId: "1089480551361",
+    appId: "1:1089480551361:web:6770e32f300c05e0861d40"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const pendientes = document.getElementById("pedidos-pendientes");
+const listos = document.getElementById("pedidos-listos");
+const btnBorrarTodosListos = document.getElementById("btn-borrar-todos-listos");
+
+// Lista en memoria de IDs de pedidos listos para borrado masivo
+let listaIdsListos = [];
+
+// ==========================================================================
+// VENTANA MODAL CON DISEÑO
+// ==========================================================================
+let accionConfirmar = null;
+
+function abrirModalConfirmar(titulo, mensaje, onConfirmar) {
+    document.getElementById("modal-titulo").textContent = titulo;
+    document.getElementById("modal-mensaje").textContent = mensaje;
+    accionConfirmar = onConfirmar;
+    document.getElementById("modal-confirmar").style.display = "flex";
+}
+
+window.cerrarModalConfirmar = function() {
+    document.getElementById("modal-confirmar").style.display = "none";
+    accionConfirmar = null;
+};
+
+document.getElementById("btn-modal-confirmar-accion").onclick = async function() {
+    if (typeof accionConfirmar === "function") {
+        const fn = accionConfirmar;
+        window.cerrarModalConfirmar();
+        await fn();
+    }
+};
+
+// Escuchar cambios en Firebase en tiempo real
+onSnapshot(collection(db, "pedidos"), (snapshot) => {
+
+    pendientes.innerHTML = "";
+    listos.innerHTML = "";
+    listaIdsListos = [];
+
+    let totalPendientes = 0;
+    let totalListos = 0;
+
+    snapshot.forEach((pedido) => {
+        const data = pedido.data();
+
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "pedido";
+
+        const cliente = document.createElement("p");
+        cliente.innerHTML = "<b>Cliente:</b> ";
+        cliente.appendChild(
+            document.createTextNode(data.nombre || "Sin nombre")
+        );
+        tarjeta.appendChild(cliente);
+
+        const titulo = document.createElement("p");
+        titulo.innerHTML = "<b>Pedido:</b>";
+        tarjeta.appendChild(titulo);
+
+        const lista = document.createElement("ul");
+
+        (data.producto || "Sin productos").split(", ").forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            lista.appendChild(li);
+        });
+
+        tarjeta.appendChild(lista);
+
+        const total = document.createElement("p");
+        total.textContent = "Total: $" + (data.total ?? 0);
+        tarjeta.appendChild(total);
+
+        const estado = document.createElement("p");
+        const estaListo = data.estado === "Listo";
+        estado.className = estaListo ? "listo" : "pendiente";
+        estado.textContent = "Estado: " + (data.estado || "Pendiente");
+        tarjeta.appendChild(estado);
+
+        if (estaListo) {
+            totalListos++;
+            listaIdsListos.push(pedido.id);
+
+            const botonBorrar = document.createElement("button");
+            botonBorrar.className = "btn-borrar";
+            botonBorrar.textContent = "Borrar pedido";
+            botonBorrar.onclick = () => solicitarBorrarPedido(pedido.id, data.nombre);
+
+            tarjeta.appendChild(botonBorrar);
+            listos.appendChild(tarjeta);
+
+        } else {
+            totalPendientes++;
+
+            const botonListo = document.createElement("button");
+            botonListo.className = "btn-listo";
+            botonListo.textContent = "Marcar como listo";
+            botonListo.onclick = () => marcarListo(pedido.id);
+
+            const botonBorrar = document.createElement("button");
+            botonBorrar.className = "btn-borrar";
+            botonBorrar.textContent = "Borrar pedido";
+            botonBorrar.onclick = () => solicitarBorrarPedido(pedido.id, data.nombre);
+
+            tarjeta.appendChild(botonListo);
+            tarjeta.appendChild(botonBorrar);
+            pendientes.appendChild(tarjeta);
+        }
+    });
+
+    document.getElementById("num-pendientes").textContent = totalPendientes;
+    document.getElementById("num-listos").textContent = totalListos;
+
+    // Mostrar u ocultar botón de borrar todos los listos
+    if (btnBorrarTodosListos) {
+        btnBorrarTodosListos.style.display = totalListos > 0 ? "inline-block" : "none";
+    }
+
+    if (totalPendientes === 0) {
+        pendientes.innerHTML = '<p class="vacio">No hay pedidos pendientes</p>';
+    }
+
+    if (totalListos === 0) {
+        listos.innerHTML = '<p class="vacio">Todavía no hay pedidos listos</p>';
+    }
+
+}, (error) => {
+    console.error("Error al cargar pedidos:", error);
+    pendientes.innerHTML =
+        '<p class="vacio">Error al cargar pedidos. Revisa la consola.</p>';
+});
+
+// Cambiar el estado a "Listo" en Firebase
+async function marcarListo(id) {
+    try {
+        await updateDoc(doc(db, "pedidos", id), {
+            estado: "Listo"
+        });
+    } catch (error) {
+        console.error("Error al marcar pedido:", error);
+        alert("No se pudo actualizar el pedido.");
+    }
+}
+
+// Ventana con diseño para borrar un pedido individual
+function solicitarBorrarPedido(id, nombreCliente) {
+    const textoCliente = nombreCliente ? ` del cliente "${nombreCliente}"` : "";
+    abrirModalConfirmar(
+        "Eliminar pedido",
+        `¿Deseas eliminar permanentemente este pedido${textoCliente}? Esta acción no se puede deshacer.`,
+        async () => {
+            try {
+                await deleteDoc(doc(db, "pedidos", id));
+            } catch (error) {
+                console.error("Error al borrar pedido:", error);
+                alert("No se pudo borrar el pedido.");
+            }
+        }
+    );
+}
+
+// Ventana con diseño para borrar todos los pedidos listos (ya hechos)
+window.solicitarBorrarTodosListos = function() {
+    if (listaIdsListos.length === 0) return;
+
+    const cantidad = listaIdsListos.length;
+    abrirModalConfirmar(
+        "Borrar todos los pedidos listos",
+        `¿Deseas eliminar todos los pedidos ya hechos (${cantidad} en total)? Esta acción los borrará permanentemente de la base de datos.`,
+        async () => {
+            try {
+                const promesas = listaIdsListos.map((id) => deleteDoc(doc(db, "pedidos", id)));
+                await Promise.all(promesas);
+            } catch (error) {
+                console.error("Error al borrar pedidos listos:", error);
+                alert("Ocurrió un error al intentar borrar los pedidos listos.");
+            }
+        }
+    );
+};
+</script>
+
+</body>
+</html>

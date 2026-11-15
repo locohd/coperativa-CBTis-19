@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- CONECTAR CSS -->
+<link rel="stylesheet" href="style.css">
+
+<title>Cooperativa CBTis 19</title>
+
+</head>
+
+<body>
+
+
+<div class="contenedor">
+
+<h1>Cooperativa CBTis 19</h1>
+
+<label>Nombre del cliente:</label>
+<input type="text" id="nombre" placeholder="Escribe tu nombre">
+
+<h2>Menú</h2>
+    
+<!-- TACOS -->
+<div class="producto">
+
+    <img src="tacos.webp" class="tacos">
+
+    <div class="info-producto">
+
+        <h3>Tacos</h3>
+
+        <p class="descripcion">Tacos de carne.</p>
+
+        <p class="precio">$15 c/u</p>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('tacos',-1)">-</button>
+            <span id="cant-tacos">0</span>
+            <button onclick="cambiarCantidad('tacos',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SANTA CLARA -->
+<div class="producto">
+
+    <img src="santaclara.jpg" class="santa" id="img-santa">
+
+    <div class="info-producto">
+
+        <h3>Santa Clara</h3>
+
+        <p class="descripcion">Elige tu sabor.</p>
+
+        <p class="precio">$15</p>
+
+        <select id="tipo-santa" onchange="cambiarImagen('santa')">
+            <option value="Chocolate">Chocolate</option>
+            <option value="Fresa">Fresa</option>
+        </select>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('santa',-1)">-</button>
+            <span id="cant-santa">0</span>
+            <button onclick="cambiarCantidad('santa',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- REFRESCO -->
+<div class="producto">
+
+    <img src="cocacola.webp" id="img-refresco" class="refresco">
+
+    <div class="info-producto">
+
+        <h3>Refresco</h3>
+
+        <p class="descripcion">Elige tu bebida.</p>
+
+        <p class="precio">$22</p>
+
+        <select id="tipo-refresco" onchange="cambiarImagen('refresco')">
+        <option>Coca Cola</option>
+        <option>Sprite</option>
+        <option>Fanta</option>
+        <option>Manzanita</option>
+</select>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('refresco',-1)">-</button>
+            <span id="cant-refresco">0</span>
+            <button onclick="cambiarCantidad('refresco',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- AGUA -->
+<div class="producto">
+
+    <img src="ciel.webp" class="agua">
+
+    <div class="info-producto">
+
+        <h3>Agua Ciel 1L</h3>
+
+        <p class="descripcion">Agua purificada.</p>
+
+        <p class="precio">$15</p>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('agua',-1)">-</button>
+            <span id="cant-agua">0</span>
+            <button onclick="cambiarCantidad('agua',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TORTA -->
+<div class="producto">
+
+    <img src="torta.webp" class="torta" id="img-torta">
+
+    <div class="info-producto">
+
+        <h3>Torta</h3>
+
+        <p class="descripcion">Escoge el tipo.</p>
+
+        <p class="precio">$30</p>
+
+        <select id="tipo-torta" onchange="cambiarImagen('torta')">
+            <option value="Jamón">Jamón</option>
+            <option value="Lomo">Lomo</option>
+            <option value="Milanesa">Milanesa</option>
+            <option value="Pierna">Pierna</option>
+        </select>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('torta',-1)">-</button>
+            <span id="cant-torta">0</span>
+            <button onclick="cambiarCantidad('torta',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- HAMBURGUESA -->
+<div class="producto">
+
+    <img src="hambruguesa.webp" class="Hambruguesa">
+
+    <div class="info-producto">
+
+        <h3>Hamburguesa con papas</h3>
+
+        <p class="descripcion">Solo hambruguesa.</p>
+
+        <p class="precio">$30</p>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('hamburguesa',-1)">-</button>
+            <span id="cant-hamburguesa">0</span>
+            <button onclick="cambiarCantidad('hamburguesa',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- HOT DOG -->
+<div class="producto">
+
+    <img src="hotdog.webp" class="Hotdog">
+
+    <div class="info-producto">
+
+        <h3>Hot Dog</h3>
+
+        <p class="descripcion">Salchicha con aderezos.</p>
+
+        <p class="precio">$25</p>
+
+        <div class="controles">
+            <button onclick="cambiarCantidad('hotdog',-1)">-</button>
+            <span id="cant-hotdog">0</span>
+            <button onclick="cambiarCantidad('hotdog',1)">+</button>
+        </div>
+
+    </div>
+
+</div>
+<h2>Total: $<span id="total">0</span></h2>
+
+<button class="btn" onclick="enviarPedido()">
+    🛒 Hacer Pedido
+</button>
+
+<div id="resumen"></div>
+
+
+</div>
+
+<!-- CONECTAR JS -->
+<script type="module" src="script.js"></script>
+
+</body>
+</html>

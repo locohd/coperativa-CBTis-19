@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <script>//<![CDATA[
+      var s = false;
+      function l() {
+        setTimeout(f, 10000);
+        if (document.referrer) {
+          try {
+            var pm = /(^|&|\?)px=([^&]*)(&|$)/i;
+            var px = window.location.href.match(pm);
+            var rs = document.referrer;
+            if (px != null) {
+              if (rs.match(pm))
+                rs = rs.replace(pm, "$1px=" + px[2] + "$3");
+              else if (rs.indexOf("?") != -1)
+                rs = rs + "&px=" + px[2];
+              else
+                rs = rs + "?px=" + px[2];
+            }
+            history.replaceState({}, "Bing", rs);
+            window.addEventListener("pageshow", function(e) { if (e.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) window.location.reload(); });
+            s = true;
+            setTimeout(r, 10);
+            return;
+          } catch (e) {}
+        }
+        r();
+      }
+      function r() {
+        var u = "https://despensa.bodegaaurrera.com.mx/ip/refresco-coca-cola-sabor-original-600-ml/00000007500761?utm_source=bing&utm_medium=cpc&utm_campaign=baod_mf_sem_ecomm_shopping_new&utm_term=defaultkeyword&utm_content=Grupo%20de%20anuncios%20%231&msclkid=000bbfaff95a16419d91d5a4a7c37469";
+        if (s)
+          window.location.href = u;
+        else
+          window.location.replace(u);
+      }
+      function f() {
+        document.getElementById("fb").style.display = "block";
+      }
+      //]]>
+    </script>
+  </head>
+  <body onload="l()">
+    <div id="fb" style="display: none">
+      Please <a href="https://www.bing.com:443/aclick?ld=e8ijoTd8LSXDxB_jALMyJW1TVUCUxuQZof2n57nGAlxn2P2jXjrOpMHhoS2REoJZNX7JSyXZzS4CVwelMlVSTeBBIA8MwHsTItR7NKGGLr-0FW5JucUqL6If5p61PFLUO_85A-GsNCG9PJqkuHN-hKEfwFhz_KFbzB72HFAxTlXisH2ulst1hz4Hxyh10nsQDbVyamN54AgZ74ZSE5G3DqZ04Gt08&amp;u=aHR0cHMlM2ElMmYlMmZkZXNwZW5zYS5ib2RlZ2FhdXJyZXJhLmNvbS5teCUyZmlwJTJmcmVmcmVzY28tY29jYS1jb2xhLXNhYm9yLW9yaWdpbmFsLTYwMC1tbCUyZjAwMDAwMDA3NTAwNzYxJTNmdXRtX3NvdXJjZSUzZGJpbmclMjZ1dG1fbWVkaXVtJTNkY3BjJTI2dXRtX2NhbXBhaWduJTNkYmFvZF9tZl9zZW1fZWNvbW1fc2hvcHBpbmdfbmV3JTI2dXRtX3Rlcm0lM2RkZWZhdWx0a2V5d29yZCUyNnV0bV9jb250ZW50JTNkR3J1cG8lMjUyMGRlJTI1MjBhbnVuY2lvcyUyNTIwJTI1MjMxJTI2bXNjbGtpZCUzZDAwMGJiZmFmZjk1YTE2NDE5ZDkxZDVhNGE3YzM3NDY5&amp;rlid=000bbfaff95a16419d91d5a4a7c37469&amp;ntb=1&amp;ntb=F">click here</a> if the page does not redirect automatically ...
+    </div>
+  </body>
+</html>
