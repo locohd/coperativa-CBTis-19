@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooperativa CBTis 19 - Menú de Comidas</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="cbtis 19.jpeg">
+</head>
+
+<body>
+
+  <!-- BANNER SUPERIOR INFORMATIVO -->
+  <div class="top-banner">
+    <span class="badge-pill">Cooperativa Escolar CBTis 19</span>
+    <span>Haz tu pedido en línea, agrégalo a tu carrito y recoge sin hacer fila</span>
+  </div>
+
+  <!-- HEADER PRINCIPAL (SIN ENLACE DE ADMIN POR CONFIDENCIALIDAD) -->
+  <header class="main-header">
+    <div class="header-container">
+      
+      <!-- LOGO Y TÍTULO -->
+      <div class="brand-section">
+        <img src="cbtis 19.jpeg" alt="CBTis 19 Logo" class="brand-logo" onerror="this.src='tacos.webp'">
+        <div class="brand-info">
+          <h1>Cooperativa CBTis 19</h1>
+          <span><span class="status-dot"></span> Abierto - Pedidos escolares</span>
+        </div>
+      </div>
+
+      <!-- BUSCADOR -->
+      <div class="search-wrapper">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Buscar tacos, tortas, refrescos, agua..." 
+          oninput="buscarProductos(this.value)"
+        >
+        <button class="search-clear" id="search-clear-btn" onclick="limpiarBusqueda()" title="Borrar búsqueda">X</button>
+      </div>
+
+      <!-- BOTÓN DEL CARRITO -->
+      <div class="header-actions">
+        <button class="btn-header-cart" onclick="abrirCarrito()" title="Ver carrito de compras">
+          <span>Carrito</span>
+          <span class="cart-count-badge" id="header-cart-count">0</span>
+          <span id="header-cart-total">$0.00</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- BANNER INFORMATIVO DE LA COOPERATIVA -->
+  <section class="hero-banner">
+    <div class="hero-container">
+      <div class="hero-left">
+        <h2>Menú de la Cooperativa Escolar</h2>
+        <div class="hero-tags">
+          <span class="hero-tag highlight">Tomando Pedidos</span>
+          <span class="hero-tag">Preparación: 10 a 15 min</span>
+          <span class="hero-tag">Entrega directa en cooperativa</span>
+        </div>
+      </div>
+      
+      <div class="hero-right-info">
+        <div class="info-stat">
+          <div class="num">CBTis 19</div>
+          <div class="label">Cooperativa</div>
+        </div>
+        <div class="info-stat" style="border-left: 1px solid #E2E8F0; padding-left: 15px;">
+          <div class="num">$0.00</div>
+          <div class="label">Comisión</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BARRA DE APARTADOS (COMIDAS, BEBIDAS) Y SELECTOR DE VISTA -->
+  <nav class="categories-sticky-bar">
+    <div class="categories-container">
+      
+      <!-- PESTAÑAS DE APARTADOS -->
+      <div class="categories-pills">
+        <button class="category-pill active" data-category="todos" onclick="filtrarPorCategoria('todos')">
+          Todos <span class="pill-count" id="count-todos">0</span>
+        </button>
+        <button class="category-pill" data-category="comidas" onclick="filtrarPorCategoria('comidas')">
+          Comidas <span class="pill-count" id="count-comidas">0</span>
+        </button>
+        <button class="category-pill" data-category="bebidas" onclick="filtrarPorCategoria('bebidas')">
+          Bebidas <span class="pill-count" id="count-bebidas">0</span>
+        </button>
+      </div>
+
+      <!-- SELECTOR DE VISTA: TARJETAS O TABLA -->
+      <div class="view-controls">
+        <button class="view-btn active" id="btn-view-grid" onclick="cambiarModoVista('grid')" title="Vista en tarjetas">
+          Tarjetas
+        </button>
+        <button class="view-btn" id="btn-view-table" onclick="cambiarModoVista('table')" title="Vista en tabla con apartados">
+          Tabla
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL: CATÁLOGO DE COMIDAS -->
+  <main class="main-content">
+    <div id="contenedor-menu">
+      <!-- Los productos se renderizan dinámicamente con script.js -->
+    </div>
+  </main>
+
+  <!-- BOTÓN FLOTANTE DEL CARRITO -->
+  <div class="floating-cart-bar" id="floating-cart-bar" style="display: none;">
+    <button class="btn-floating-cart" onclick="abrirCarrito()">
+      <span>Ver Carrito</span>
+      <span class="floating-cart-badge" id="floating-cart-count">0</span>
+      <span class="floating-cart-price" id="floating-cart-price">$0.00</span>
+    </button>
+  </div>
+
+  <!-- PANEL LATERAL DESPLEGABLE DEL CARRITO (UBER EATS STYLE) -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="cerrarCarrito()"></div>
+  
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3>Tu Carrito <span id="drawer-count-title">(0)</span></h3>
+      <button class="btn-close-drawer" onclick="cerrarCarrito()" title="Cerrar carrito">X</button>
+    </div>
+
+    <!-- LISTA DE ARTÍCULOS EN EL CARRITO -->
+    <div class="drawer-items-list" id="drawer-items-list">
+      <!-- Se llena automáticamente con script.js -->
+    </div>
+
+    <!-- NOTAS ESPECIALES -->
+    <div class="drawer-notes">
+      <label for="cliente-notas">Notas para el pedido (opcional):</label>
+      <textarea id="cliente-notas" placeholder="Ej. Sin cebolla, con salsa verde, caliente..."></textarea>
+    </div>
+
+    <!-- DESGLOSE Y BOTÓN DE PAGO -->
+    <div class="drawer-footer">
+      <div class="price-breakdown">
+        <div class="breakdown-row">
+          <span>Subtotal:</span>
+          <span id="drawer-subtotal">$0.00</span>
+        </div>
+        <div class="breakdown-row">
+          <span>Comisión de servicio:</span>
+          <span style="color: #06C167; font-weight: 700;">Gratis ($0.00)</span>
+        </div>
+        <div class="breakdown-row total-row">
+          <span>Total a pagar:</span>
+          <span id="drawer-total" style="color: #06C167;">$0.00</span>
+        </div>
+      </div>
+
+      <button class="btn-proceed-pay" id="btn-drawer-pay" onclick="abrirCheckout()">
+        Proceder al Pago ($0.00)
+      </button>
+
+      <button class="btn-clear-cart" onclick="vaciarCarrito()">
+        Vaciar Carrito
+      </button>
+    </div>
+  </aside>
+
+  <!-- VENTANA MODAL PARA PAGAR (CHECKOUT) -->
+  <div class="modal-backdrop" id="modal-checkout">
+    <div class="checkout-modal">
+      
+      <div class="modal-header">
+        <h3>Finalizar Pedido - Cooperativa CBTis 19</h3>
+        <button class="btn-close-drawer" onclick="cerrarCheckout()" title="Cerrar">X</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- RESUMEN DE LA ORDEN -->
+        <div class="checkout-summary-box">
+          <h4>Resumen de tu compra</h4>
+          <div class="checkout-items-preview" id="checkout-items-preview">
+            <!-- Lista previa de los productos -->
+          </div>
+          <div class="checkout-summary-total">
+            <span>Total a Pagar:</span>
+            <span id="checkout-modal-total" style="color: #06C167;">$0.00 MXN</span>
+          </div>
+        </div>
+
+        <!-- FORMULARIO: NOMBRE Y MÉTODO DE PAGO -->
+        <form id="form-checkout" onsubmit="confirmarPedido(event)">
+          
+          <div class="form-group">
+            <label for="cliente-nombre">
+              Nombre del cliente: <span class="req">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="cliente-nombre" 
+              placeholder="Escribe tu nombre y apellido" 
+              required
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="cliente-grupo">
+              Grupo o Salón (Opcional):
+            </label>
+            <input 
+              type="text" 
+              id="cliente-grupo" 
+              placeholder="Ej. 4A Programación / Docente"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Método de Pago:</label>
+            <div class="payment-options-grid">
+              
+              <label class="payment-radio-label">
+                <input type="radio" name="metodo-pago" value="Efectivo en ventanilla" checked>
+                <span class="pay-text">Efectivo al recoger</span>
+              </label>
+
+              <label class="payment-radio-label">
+                <input type="radio" name="metodo-pago" value="Transferencia">
+                <span class="pay-text">Transferencia / CoDi</span>
+              </label>
+
+            </div>
+          </div>
+
+          <p style="font-size: 12px; color: #64748B; margin-top: 10px; line-height: 1.4;">
+            El pedido se registrará inmediatamente en la cocina de la cooperativa. Podrás recogerlo indicando tu nombre en ventanilla.
+          </p>
+
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" onclick="cerrarCheckout()">
+          Volver
+        </button>
+        <button type="button" class="btn-confirm-order" id="btn-confirmar-pedido" onclick="confirmarPedido()">
+          Confirmar y Pagar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VENTANA MODAL DE TICKET / CONFIRMACIÓN -->
+  <div class="modal-backdrop" id="modal-ticket">
+    <div class="ticket-modal-card">
+      <div class="success-icon-badge">OK</div>
+      <h3>Pedido Recibido con Éxito</h3>
+      <p style="color: #64748B; font-size: 14px;">Tu comida ya se está preparando en la cooperativa.</p>
+      
+      <div class="ticket-num-badge" id="ticket-num">TICKET #CBT-0000</div>
+      
+      <div class="ticket-details-box">
+        <p><b>Cliente:</b> <span id="ticket-cliente">-</span></p>
+        <p><b>Productos:</b> <span id="ticket-items">-</span></p>
+        <p><b>Total a Pagar:</b> <span id="ticket-total" style="font-weight: 800; color: #06C167;">$0.00</span></p>
+        <p><b>Forma de Pago:</b> <span id="ticket-pago">Efectivo</span></p>
+        <p><b>Tiempo Estimado:</b> 10 a 15 minutos</p>
+        <p style="margin-top: 8px; font-size: 12px; color: #8B1E2D; font-weight: 700;">
+          Acude a la ventanilla de la cooperativa y menciona tu nombre para recoger tu pedido.
+        </p>
+      </div>
+
+      <button class="btn-close-ticket" onclick="cerrarTicket()">
+        Aceptar
+      </button>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN TOAST FLOTANTE -->
+  <div class="toast-container" id="toast-msg">
+    Producto agregado al carrito
+  </div>
+
+  <!-- SCRIPT -->
+  <script type="module" src="script.js"></script>
+
+</body>
+</html>
