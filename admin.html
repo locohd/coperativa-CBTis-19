@@ -278,28 +278,7 @@ button {
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-    getFirestore,
-    collection,
-    onSnapshot,
-    doc,
-    updateDoc,
-    deleteDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCU5hqrwn8sJacmOr3YL_I8zPOdoXiLE4g",
-    authDomain: "coperativa-cbtis-19-29c77.firebaseapp.com",
-    projectId: "coperativa-cbtis-19-29c77",
-    storageBucket: "coperativa-cbtis-19-29c77.firebasestorage.app",
-    messagingSenderId: "1089480551361",
-    appId: "1:1089480551361:web:6770e32f300c05e0861d40"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+    }
 const pendientes = document.getElementById("pedidos-pendientes");
 const listos = document.getElementById("pedidos-listos");
 const btnBorrarTodosListos = document.getElementById("btn-borrar-todos-listos");
